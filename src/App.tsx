@@ -6,13 +6,34 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
+type Arr = {
+  content: string;
+  embedding: number[];
+};
+
+const content = ['Lord of the rings is the best!', 'Star wars comes next'];
+const arr: Arr[] = [];
+
 function App() {
   async function handleClick() {
-    const response = await openai.embeddings.create({
-      model: 'text-embedding-ada-002',
-      input: 'Lord of the rings is the best!',
-    });
-    console.log(response.data[0].embedding);
+    async function main(input: string[]) {
+      await Promise.all(
+        input.map(async (textChunk) => {
+          const response = await openai.embeddings.create({
+            model: 'text-embedding-ada-002',
+            input: textChunk,
+          });
+          const dataObj = {
+            content: textChunk,
+            embedding: response.data[0].embedding,
+          };
+          arr.push(dataObj);
+        })
+      );
+      console.log('all embeddings complete');
+      console.log(arr);
+    }
+    main(content).catch((e) => console.error(e));
   }
 
   return (
