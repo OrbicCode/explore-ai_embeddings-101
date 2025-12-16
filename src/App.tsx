@@ -11,7 +11,7 @@ type Arr = {
   embedding: number[];
 };
 
-const content = ['Lord of the rings is the best!', 'Star wars comes next'];
+const content = ['Lord of the rings is the best!', 'Star wars comes next as second best'];
 const arr: Arr[] = [];
 
 function App() {
